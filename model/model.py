@@ -421,8 +421,8 @@ class MoEGate(nn.Module):
             raise NotImplementedError(f'不支持的 MoE 门控评分函数: {self.scoring_func}')
 
         # 选择 Top-K 的 Expert 及其对应的分数(权重)
-        # topk_weight: (Batch*SeqLen, top_k)
-        # topk_idx: (Batch*SeqLen, top_k)
+        # topk_weight: (Batch*SeqLen, top_k) 记录每个 token 分配给 Expert 的权重 形状 为 (Batch*SeqLen, top_k)
+        # topk_idx: (Batch*SeqLen, top_k) 记录每个 token 被分配到的 Expert 的索引 形状 为 (Batch*SeqLen, top_k)
         topk_weight, topk_idx = torch.topk(scores, k=self.top_k, dim=-1, sorted=False)
 
         # 可选：对 Top-K 的权重进行归一化，使它们的和为 1
